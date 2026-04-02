@@ -1,11 +1,6 @@
-.package.json
-
-.package-lock.json
-
+package.json
+package-lock.json
 .env
-
 logFiles/
-
 node_modules/
-
-.demo.txt
+demo.txt
