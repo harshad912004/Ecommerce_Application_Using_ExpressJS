@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>E-commerce Application</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/productStyle.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="product-grid-header">
+               <h2 class="dashboard-title">Our Products</h2>
+          </div>
+
+          <%- include('../product/product', { product: product }) %>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<div class="product-container">
+     <% if (orders && orders.length> 0) { %>
+          <% orders.forEach((o)=> { %>
+               <div class="product-card">
+                    <p class="product-brand">
+                         <%= o.id %>
+                    </p>
+                    <p class="product-price">₹<%= o.total_amount %>
+                    </p>
+               </div>
+               <% }); %>
+                    <% } else { %>
+                         <div class="no-products">
+                              <p>No orders placed at the moment.</p>
+                         </div>
+                         <% } %>
+</div>

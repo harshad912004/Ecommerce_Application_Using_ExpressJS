@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Admin Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="admin-dashboard">
+               <div class="header-section">
+                    <h1 class="dashboard-title">All Products</h1>
+               </div>
+
+               <div class="filter-section">
+                    <form method="GET" action="/admin/products" class="filter-form">
+                         <input type="text" id="name" name="name" placeholder="Search by name"
+                              value="<%=filters.name %>">
+                         <input type="text" id="brand" name="brand" placeholder="Search by brand"
+                              value="<%=filters.brand %>">
+                         <button type="submit" class="filter-btn">Filter</button>
+                         <a href="/admin/products" class="reset-btn">Reset</a>
+                    </form>
+               </div>
+
+               <% if (product && product.length> 0) { %>
+                    <table class="products-table">
+                         <thead>
+                              <tr>
+                                   <th>Sr. No.</th>
+                                   <th>Name</th>
+                                   <th>Brand</th>
+                                   <th>Price</th>
+                                   <th>Description</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <% product.forEach((p)=> { %>
+                                   <tr>
+                                        <td>
+                                             <%= (currentPage - 1) * 5 + product.indexOf(p) + 1 %>
+                                        </td>
+                                        <td>
+                                             <%= p.name ? p.name.charAt(0).toUpperCase() + p.name.slice(1) : '' %>
+                                        </td>
+                                        <td>
+                                             <%= p.brand ? p.brand.toUpperCase() : '' %>
+                                        </td>
+                                        <td>
+                                             ₹<%= p.price %>
+                                        </td>
+                                        <td>
+                                             <%= p.description ? p.description.charAt(0).toUpperCase() +
+                                                  p.description.slice(1) : '' %>
+                                        </td>
+                                   </tr>
+                                   <% }); %>
+                         </tbody>
+                    </table>
+
+                    <% if (totalPages> 1) { %>
+                         <div class="pagination-container">
+                              <nav class="pagination" aria-label="Pagination Navigation">
+                                   <% if (currentPage> 1) { %>
+                                        <a href="/admin/products?page=1" class="pagination-link pagination-first"
+                                             title="First page">
+                                             <span>« First</span>
+                                        </a>
+                                        <a href="/admin/products?page=<%= currentPage - 1 %>"
+                                             class="pagination-link pagination-prev">
+                                             <span>‹ Previous</span>
+                                        </a>
+                                        <% } %>
+
+                                             <div class="pagination-numbers">
+                                                  <% for (let i=1; i <=totalPages; i++) { %>
+                                                       <% if (i===currentPage) { %>
+                                                            <span class="pagination-link pagination-current">
+                                                                 <%= i %>
+                                                            </span>
+                                                            <% } else if (i===1 || i===totalPages || (i>=
+                                                                 currentPage - 1 && i <= currentPage + 1)) { %>
+                                                                      <a href="/admin/products?page=<%= i %>"
+                                                                           class="pagination-link">
+                                                                           <%= i %>
+                                                                      </a>
+                                                                      <% } else if (i===2 || i===totalPages - 1) { %>
+                                                                           <span
+                                                                                class="pagination-link pagination-dots">...</span>
+                                                                           <% } %>
+                                                                                <% } %>
+                                             </div>
+
+                                             <% if (currentPage < totalPages) { %>
+                                                  <a href="/admin/products?page=<%= currentPage + 1 %>"
+                                                       class="pagination-link pagination-next">
+                                                       <span>Next ›</span>
+                                                  </a>
+                                                  <a href="/admin/products?page=<%= totalPages %>"
+                                                       class="pagination-link pagination-last" title="Last page">
+                                                       <span>Last »</span>
+                                                  </a>
+                                                  <% } %>
+                              </nav>
+                              <div class="pagination-info">
+                                   Showing page <strong>
+                                        <%= currentPage %>
+                                   </strong> of <strong>
+                                        <%= totalPages %>
+                                   </strong>
+                                   (<strong>
+                                        <%= totalItems %>
+                                   </strong> total products)
+                              </div>
+                         </div>
+                         <% } %>
+
+                              <% } else { %>
+                                   <div class="no-products">
+                                        <p>No products available at the moment.</p>
+                                   </div>
+                                   <% } %>
+          </div>
+          </div>
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>My Cart</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+          <div class="user-dashboard">
+               <div class="cart-header">
+                    <h2>My Cart</h2>
+               </div>
+               <div class="cart-container">
+                    <div class="cart-list">
+                         <% if (product && product.length> 0) { %>
+                              <table class="cart-table">
+                                   <thead>
+                                        <tr>
+                                             <th>Product Name</th>
+                                             <th>Brand</th>
+                                             <th>Price</th>
+                                             <th>Qty</th>
+                                             <th>Total</th>
+                                             <th>Action</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        <% product.forEach((p)=> { %>
+                                             <tr>
+                                                  <td class="cart-item-name">
+                                                       <%= p.name ? p.name.charAt(0).toUpperCase() + p.name.slice(1)
+                                                            : '' %>
+                                                  </td>
+                                                  <td>
+                                                       <%= p.brand ? p.brand.charAt(0).toUpperCase() + p.brand.slice(1)
+                                                            : '' %>
+                                                  </td>
+                                                  <td class="cart-item-price">₹<%= p.price %>
+                                                  </td>
+                                                  <td class="cart-item-qty">
+                                                       <%= p.quantity %>
+                                                  </td>
+                                                  <td class="cart-item-total">₹<%= p.total_price %>
+                                                  </td>
+                                                  <td>
+                                                       <form action="/user/cart/remove" method="POST">
+                                                            <input type="hidden" name="product_id"
+                                                                 value="<%= p.product_id %>">
+                                                            <button type="submit"
+                                                                 class="cart-remove-btn">Remove</button>
+                                                       </form>
+                                                  </td>
+                                             </tr>
+                                             <% }); %>
+                                   </tbody>
+                              </table>
+                    </div>
+
+                    <div class="cart-summary">
+                         <div class="summary-row">
+                              <span class="summary-total">Total Amount: ₹<%= product.reduce((sum, p)=> sum +
+                                        parseFloat(p.total_price), 0).toFixed(2) %>
+                              </span>
+                              <form action="/user/placeOrder" method="POST">
+                                   <input type="hidden" name="product_id" value="<%= product.product_id %>">
+                                   <button type="submit" class="btn-place-order">Place Order</button>
+
+                                   <div class="cart-actions">
+                                        <a href="/user/" class="btn-continue-shopping">Continue Shopping</a>
+                                   </div>
+                              </form>
+
+                              <% } else { %>
+                                   <div class="empty-cart">
+                                        <h3>Your cart is empty</h3>
+                                        <p>You don't have any items in your cart right now!</p>
+                                        <a href="/user/">Start Shopping</a>
+                                   </div>
+                                   <% } %>
+                         </div>
+                    </div>
+               </div>
+          </div>
+</body>
+
+</html>

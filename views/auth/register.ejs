@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Registration Page</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+</head>
+
+<body>
+     <div class="auth-container">
+          <div class="auth-header">
+               <h1>Create Account</h1>
+          </div>
+          <form action="/auth/register" method="POST" class="auth-form">
+               <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div class="form-group">
+                         <label for="name">Full Name:</label>
+                         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                         <label for="email">Email:</label>
+                         <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    </div>
+               </div>
+
+               <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div class="form-group">
+                         <label for="phone">Phone Number:</label>
+                         <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <div class="form-group">
+                         <label for="password">Password:</label>
+                         <input type="password" id="password" name="password" placeholder="Create a strong password"
+                              required>
+                    </div>
+               </div>
+
+               <button type="submit">Register</button>
+          </form>
+          <div class="auth-links">
+               <p>Already have an account? <a href="/auth/login">Login here</a></p>
+               <div class="divider">or</div>
+               <a href="/">Back To Home</a>
+          </div>
+     </div>
+</body>
+
+</html>

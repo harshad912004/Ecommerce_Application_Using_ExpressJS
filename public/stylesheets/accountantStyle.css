@@ -1,0 +1,242 @@
+/* Accountant Dashboard Styles */
+
+.accountant-dashboard {
+     padding: 20px;
+     max-width: 1200px;
+     margin: 0 auto;
+}
+
+.dashboard-title {
+     font-size: 2.5em;
+     font-weight: bold;
+     color: #333;
+     margin-bottom: 30px;
+     border-bottom: 3px solid #43e97b;
+     padding-bottom: 10px;
+}
+
+.financial-summary {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+     gap: 15px;
+     margin-top: 20px;
+     background: #f5f5f5;
+     padding: 20px;
+     border-radius: 10px;
+}
+
+.financial-box {
+     background: white;
+     padding: 20px;
+     border-left: 4px solid #43e97b;
+     border-radius: 5px;
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+     transition: transform 0.3s ease;
+}
+
+.financial-box:hover {
+     transform: translateY(-5px);
+}
+
+.financial-number {
+     font-size: 1.8em;
+     font-weight: bold;
+     color: #43e97b;
+}
+
+.financial-label {
+     color: #666;
+     font-size: 0.9em;
+     margin-top: 5px;
+}
+
+/* Orders View Styles */
+
+.accountant-container {
+     padding: 20px;
+     max-width: 1400px;
+     margin: 0 auto;
+}
+
+.orders-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 30px;
+     border-bottom: 2px solid #43e97b;
+     padding-bottom: 15px;
+}
+
+.page-title {
+     font-size: 2em;
+     font-weight: bold;
+     color: #333;
+}
+
+.orders-info {
+     display: flex;
+     gap: 10px;
+     align-items: center;
+}
+
+.info-badge {
+     background: #43e97b;
+     color: white;
+     padding: 8px 16px;
+     border-radius: 20px;
+     font-size: 0.9em;
+     font-weight: bold;
+}
+
+.orders-table-wrapper {
+     overflow-x: auto;
+     background: white;
+     border-radius: 8px;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.orders-table {
+     width: 100%;
+     border-collapse: collapse;
+     font-size: 0.95em;
+}
+
+.orders-table thead {
+     background: #f8f9fa;
+     border-bottom: 2px solid #43e97b;
+}
+
+.orders-table th {
+     padding: 15px;
+     text-align: left;
+     font-weight: bold;
+     color: #333;
+}
+
+.orders-table tbody tr {
+     border-bottom: 1px solid #eee;
+     transition: background-color 0.3s ease;
+}
+
+.orders-table tbody tr:hover {
+     background-color: #f9f9f9;
+}
+
+.order-row.pending {
+     background-color: #fff3cd;
+}
+
+.order-row.completed {
+     background-color: #d4edda;
+}
+
+.order-row.cancelled {
+     background-color: #f8d7da;
+}
+
+.orders-table td {
+     padding: 15px;
+     color: #555;
+}
+
+.order-id {
+     font-weight: bold;
+     color: #43e97b;
+     font-size: 1.1em;
+}
+
+.items-count {
+     background: #e8f5e9;
+     color: #2e7d32;
+     padding: 4px 8px;
+     border-radius: 4px;
+     font-weight: 500;
+}
+
+.amount {
+     font-weight: bold;
+     color: #1976d2;
+     font-size: 1.1em;
+}
+
+.status-badge {
+     display: inline-block;
+     padding: 6px 12px;
+     border-radius: 4px;
+     font-weight: 600;
+     font-size: 0.85em;
+     text-transform: uppercase;
+}
+
+.status-badge.pending {
+     background: #ffc107;
+     color: #333;
+}
+
+.status-badge.completed {
+     background: #28a745;
+     color: white;
+}
+
+.status-badge.cancelled {
+     background: #dc3545;
+     color: white;
+}
+
+/* No Orders State */
+
+.no-orders-container {
+     text-align: center;
+     padding: 60px 20px;
+     background: white;
+     border-radius: 8px;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.no-orders-icon {
+     font-size: 3em;
+     margin-bottom: 20px;
+}
+
+.no-orders-text {
+     font-size: 1.5em;
+     font-weight: bold;
+     color: #333;
+     margin-bottom: 10px;
+}
+
+.no-orders-subtitle {
+     color: #999;
+     font-size: 0.95em;
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+     .orders-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+     }
+
+     .page-title {
+          font-size: 1.5em;
+     }
+
+     .orders-table {
+          font-size: 0.85em;
+     }
+
+     .orders-table th,
+     .orders-table td {
+          padding: 10px;
+     }
+
+     .accountant-dashboard {
+          padding: 10px;
+     }
+
+     .financial-summary {
+          grid-template-columns: 1fr;
+     }
+}

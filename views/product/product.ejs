@@ -1,0 +1,31 @@
+<div class="product-container">
+     <% if (product && product.length> 0) { %>
+          <% product.forEach((p)=> { %>
+               <div class="product-card">
+                    <h3 class="product-name">
+                         <%= p.name ? p.name.charAt(0).toUpperCase() + p.name.slice(1) : '' %>
+                    </h3>
+                    <p class="product-brand">
+                         <%= p.brand %>
+                    </p>
+                    <p class="product-price">₹<%= p.price %>
+                    </p>
+                    <p class="product-description">
+                         <%= p.description ? p.description.charAt(0).toUpperCase() + p.description.slice(1) : '' %>
+                    </p>
+                    <form action="/user/cart/add" method="POST" class="add-to-cart-form">
+                         <input type="hidden" name="product_id" value="<%= p.id %>">
+
+                         <label for="quantity-<%= p.id %>" style="margin-top: 0.5rem;">Qty:</label>
+                         <input type="number" name="quantity" value="1" min="1" class="product-quantity-input">
+
+                         <button type="submit" class="product-btn btn-add-cart">Add to Cart</button>
+                    </form>
+               </div>
+               <% }); %>
+                    <% } else { %>
+                         <div class="no-products">
+                              <p>No products available at the moment.</p>
+                         </div>
+                         <% } %>
+</div>

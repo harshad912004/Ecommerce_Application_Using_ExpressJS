@@ -1,0 +1,10 @@
+controllers:
+
+accountant=
+     getAllOrders
+     updateOrderStatus
+     totalRevenue
+     totalOrders
+     monthlyAverageRevenue
+
+receptionist=

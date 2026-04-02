@@ -1,0 +1,39 @@
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Accountant Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+     <link rel="stylesheet" href="/stylesheets/accountantStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="accountant-dashboard">
+               <div class="dashboard-title">Accountant Dashboard</div>
+
+               <!-- Financial Summary -->
+               <div class="financial-summary">
+                    <div class="financial-box">
+                         <div class="financial-number">₹<%= totalRevenue %>
+                         </div>
+                         <div class="financial-label">Total Revenue</div>
+                    </div>
+                    <div class="financial-box">
+                         <div class="financial-number">
+                              <%= totalOrders %>
+                         </div>
+                         <div class="financial-label">Total Orders</div>
+                    </div>
+                    <div class="financial-box">
+                         <div class="financial-number">₹<%= monthlyAverage %>
+                         </div>
+                         <div class="financial-label">Monthly Average</div>
+                    </div>
+               </div>
+          </div>
+
+</body>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Edit Product - Admin Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="admin-dashboard">
+               <h1 class="dashboard-title">Edit Product</h1>
+
+               <form action="/admin/products/edit/<%= product.id %>" method="POST" class="edit-product-form">
+                    <div class="form-group">
+                         <label for="name">Product Name:</label>
+                         <input type="text" id="name" name="name" value="<%= product.name %>" required>
+                    </div>
+                    <div class="form-group">
+                         <label for="brand">Brand:</label>
+                         <input type="text" id="brand" name="brand" value="<%= product.brand %>" required>
+                    </div>
+                    <div class="form-group">
+                         <label for="price">Price:</label>
+                         <input type="number" id="price" name="price" step="0.01" value="<%= product.price %>" required>
+                    </div>
+                    <div class="form-group">
+                         <label for="description">Description:</label>
+                         <textarea id="description" name="description" required><%= product.description %></textarea>
+                    </div>
+                    <button type="submit" class="save-btn">Save Changes</button>
+               </form>
+          </div>
+
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Receptionist Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+     <link rel="stylesheet" href="/stylesheets/receptionistStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="receptionist-dashboard">
+               <div class="dashboard-title">Receptionist Dashboard</div>
+
+               <!-- Quick Stats -->
+               <div class="reception-stats">
+                    <div class="stat-box">
+                         <div class="stat-number">
+                              <%= totalActiveUsers %>
+                         </div>
+                         <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-box">
+                         <div class="stat-number">
+                              <%= totalInactiveUsers %>
+                         </div>
+                         <div class="stat-label">Inactive Users</div>
+                    </div>
+               </div>
+          </div>
+
+</body>
+
+</html>

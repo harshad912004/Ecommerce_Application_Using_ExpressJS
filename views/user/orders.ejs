@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>My Orders</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+          <div class="user-dashboard">
+               <div class="orders-header">
+                    <h2>My Orders History</h2>
+               </div>
+               <div class="orders-container">
+                    <div class="orders-list">
+                         <% if (orders && orders.length> 0) { %>
+                              <table class="orders-table">
+                                   <thead>
+                                        <tr>
+                                             <th>Product</th>
+                                             <th>Brand</th>
+                                             <th>Quantity</th>
+                                             <th>Total Amount</th>
+                                             <th>Order Date</th>
+                                             <th>Status</th>
+                                             <th>Delivered Date</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        <% orders.forEach((order)=> { %>
+                                             <tr>
+                                                  <td class="orders-item-name">
+                                                       <%= order.name ? order.name.charAt(0).toUpperCase() +
+                                                            order.name.slice(1) : '' %>
+                                                  </td>
+                                                  <td>
+                                                       <%= order.brand ? order.brand.charAt(0).toUpperCase() +
+                                                            order.brand.slice(1) : '' %>
+                                                  </td>
+                                                  <td>
+                                                       <%= order.quantity %>
+                                                  </td>
+                                                  <td class="orders-item-total-price">₹<%= order.total_price %>
+                                                  </td>
+                                                  <td>
+                                                       <%= new Date(order.order_date).toLocaleDateString('en-US') %>
+                                                  </td>
+                                                  <td>
+                                                       <%= order.order_status ?
+                                                            order.order_status.charAt(0).toUpperCase() +
+                                                            order.order_status.slice(1) : '' %>
+                                                  </td>
+                                                  <td>
+                                                       <%= order.delivered_date ? new
+                                                            Date(order.delivered_date).toLocaleDateString('en-US') : '-'
+                                                            %>
+                                                  </td>
+                                             </tr>
+                                             <% }); %>
+                                   </tbody>
+                              </table>
+                    </div>
+                    <% } else { %>
+                         <div class="empty-orders">
+                              <h3>Your order history is empty</h3>
+                              <p>You did't placed any order yet, place your first order!</p>
+                              <a href="/user/welcome">Start Shopping</a>
+                         </div>
+                         <% } %>
+               </div>
+          </div>
+</body>
+
+</html>

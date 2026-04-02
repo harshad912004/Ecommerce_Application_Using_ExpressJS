@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Add New Product - Receptionist Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+     <link rel="stylesheet" href="/stylesheets/receptionistStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="admin-dashboard">
+               <h1 class="dashboard-title">Add New Product</h1>
+
+               <form action="/receptionist/addNewProducts" method="POST" class="add-product-form">
+                    <div class="form-group">
+                         <label for="name">Product Name:</label>
+                         <input type="text" id="name" name="name" placeholder="Enter product name" required>
+                    </div>
+                    <div class="form-group">
+                         <label for="price">Price:</label>
+                         <input type="number" id="price" name="price" step="0.01" placeholder="Enter product price"
+                              required>
+                    </div>
+                    <div class="form-group">
+                         <label for="brand">Brand:</label>
+                         <input type="text" id="brand" name="brand" placeholder="Enter brand name" required>
+                    </div>
+                    <div class="form-group">
+                         <label for="description">Description:</label>
+                         <textarea id="description" name="description" placeholder="Enter product description"
+                              required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Product</button>
+               </form>
+          </div>
+
+</body>
+
+</html>

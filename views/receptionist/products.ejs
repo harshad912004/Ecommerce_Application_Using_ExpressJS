@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Receptionist Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+     <link rel="stylesheet" href="/stylesheets/receptionistStyle.css">
+     <link rel="stylesheet" href="/stylesheets/productStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="admin-dashboard">
+               <div class="header-section">
+                    <h1 class="dashboard-title">Manage Products</h1>
+               </div>
+
+               <div class="filter-section">
+                    <form method="GET" action="/receptionist/products" class="filter-form">
+                         <input type="text" id="name" name="name" placeholder="Search by name"
+                              value="<%=filters.name %>">
+                         <input type="text" id="brand" name="brand" placeholder="Search by brand"
+                              value="<%=filters.brand %>">
+                         <input type="number" id="minPrice" name="minPrice" placeholder="Min price"
+                              value="<%=filters.minPrice %>" step="0.01">
+                         <input type="number" id="maxPrice" name="maxPrice" placeholder="Max price"
+                              value="<%=filters.maxPrice %>" step="0.01">
+                         <button type="submit" class="filter-btn">Filter</button>
+                         <a href="/receptionist/products" class="reset-btn">Reset</a>
+                    </form>
+               </div>
+
+               <% if (product && product.length> 0) { %>
+                    <table class="products-table">
+                         <thead>
+                              <tr>
+                                   <th>Sr. No.</th>
+                                   <th>Name</th>
+                                   <th>Brand</th>
+                                   <th>Price</th>
+                                   <th>Description</th>
+                                   <th>Action</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <% product.forEach((p)=> { %>
+                                   <tr>
+                                        <td>
+                                             <%= (currentPage - 1) * 5 + product.indexOf(p) + 1 %>
+                                        </td>
+                                        <td>
+                                             <%= p.name ? p.name.charAt(0).toUpperCase() + p.name.slice(1) : '' %>
+                                        </td>
+                                        <td>
+                                             <%= p.brand ? p.brand.toUpperCase() : '' %>
+                                        </td>
+                                        <td>
+                                             ₹<%= p.price %>
+                                        </td>
+                                        <td>
+                                             <%= p.description ? p.description.charAt(0).toUpperCase() +
+                                                  p.description.slice(1) : '' %>
+                                        </td>
+                                        <td>
+                                             <a href="/receptionist/products/edit:<%= p.id %>" class="edit-btn"
+                                                  title="Edit Product">Edit</a>
+                                             <form action="/receptionist/products/delete:<%= p.id %>" method="POST"
+                                                  class="delete-form"
+                                                  onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                  <button type="submit" class="delete-btn"
+                                                       title="Delete Product">Delete</button>
+                                             </form>
+                                        </td>
+                                   </tr>
+                                   <% }); %>
+                         </tbody>
+                    </table>
+
+                    <% if (totalPages> 1) { %>
+                         <div class="pagination-container">
+                              <nav class="pagination" aria-label="Pagination Navigation">
+                                   <% if (currentPage> 1) { %>
+                                        <a href="/receptionist/products?page=1" class="pagination-link pagination-first"
+                                             title="First page">
+                                             <span>« First</span>
+                                        </a>
+                                        <a href="/receptionist/products?page=<%= currentPage - 1 %>"
+                                             class="pagination-link pagination-prev">
+                                             <span>‹ Previous</span>
+                                        </a>
+                                        <% } %>
+
+                                             <div class="pagination-numbers">
+                                                  <% for (let i=1; i <=totalPages; i++) { %>
+                                                       <% if (i===currentPage) { %>
+                                                            <span class="pagination-link pagination-current">
+                                                                 <%= i %>
+                                                            </span>
+                                                            <% } else if (i===1 || i===totalPages || (i>=
+                                                                 currentPage - 1 && i <= currentPage + 1)) { %>
+                                                                      <a href="/receptionist/products?page=<%= i %>"
+                                                                           class="pagination-link">
+                                                                           <%= i %>
+                                                                      </a>
+                                                                      <% } else if (i===2 || i===totalPages - 1) { %>
+                                                                           <span
+                                                                                class="pagination-link pagination-dots">...</span>
+                                                                           <% } %>
+                                                                                <% } %>
+                                             </div>
+
+                                             <% if (currentPage < totalPages) { %>
+                                                  <a href="/receptionist/products?page=<%= currentPage + 1 %>"
+                                                       class="pagination-link pagination-next">
+                                                       <span>Next ›</span>
+                                                  </a>
+                                                  <a href="/receptionist/products?page=<%= totalPages %>"
+                                                       class="pagination-link pagination-last" title="Last page">
+                                                       <span>Last »</span>
+                                                  </a>
+                                                  <% } %>
+                              </nav>
+                              <div class="pagination-info">
+                                   Showing page <strong>
+                                        <%= currentPage %>
+                                   </strong> of <strong>
+                                        <%= totalPages %>
+                                   </strong>
+                                   (<strong>
+                                        <%= totalItems %>
+                                   </strong> total products)
+                              </div>
+                         </div>
+                         <% } %>
+
+                              <% } else { %>
+                                   <div class="no-products">
+                                        <p>No products available at the moment.</p>
+                                   </div>
+                                   <% } %>
+          </div>
+          </div>
+
+</body>
+
+</html>

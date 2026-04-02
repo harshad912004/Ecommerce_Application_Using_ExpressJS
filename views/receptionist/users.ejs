@@ -1,0 +1,130 @@
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Receptionist - Manage Users</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+     <link rel="stylesheet" href="/stylesheets/receptionistStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="receptionist-users">
+               <h1 class="dashboard-title">Manage Users</h1>
+
+               <div class="filter-section">
+                    <form method="GET" action="/receptionist/users" class="filter-form">
+                         <input type="text" id="name" name="name" placeholder="Search by name"
+                              value="<%=filters.name %>" class="filter-input">
+                         <input type="text" id="email" name="email" placeholder="Search by email"
+                              value="<%=filters.email %>" class="filter-input">
+                         <input type="text" id="phone" name="phone" placeholder="Search by phone"
+                              value="<%=filters.phone %>" class="filter-input">
+                         <button type="submit" class="filter-btn">Filter</button>
+                         <a href="/receptionist/users" class="reset-btn">Reset</a>
+                    </form>
+               </div>
+
+               <% if (users && users.length> 0) { %>
+                    <table class="users-table">
+                         <thead>
+                              <tr>
+                                   <th>Sr. No</th>
+                                   <th>Name</th>
+                                   <th>Email</th>
+                                   <th>Phone</th>
+                                   <th>Actions</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <% users.forEach(user=> { %>
+                                   <tr>
+                                        <td>
+                                             <%= users.indexOf(user) + 1 %>
+                                        </td>
+                                        <td>
+                                             <%= user.name %>
+                                        </td>
+                                        <td>
+                                             <%= user.email %>
+                                        </td>
+                                        <td>
+                                             <%= user.phone %>
+                                        </td>
+                                        <td>
+                                             <!-- Action buttons (Edit/Delete) -->
+                                             <a href="/receptionist/users/delete/<%= user.id %>" class="delete-btn"
+                                                  onclick="return confirm('Are you sure?')">Delete</a>
+                                        </td>
+                                   </tr>
+                                   <% }) %>
+                         </tbody>
+                    </table>
+
+                    <% if (totalPages> 1) { %>
+                         <div class="pagination-container">
+                              <nav class="pagination" aria-label="Pagination Navigation">
+                                   <% if (currentPage> 1) { %>
+                                        <a href="/receptionist/users?page=1&name=<%=filters.name %>&email=<%=filters.email %>&phone=<%=filters.phone %>"
+                                             class="pagination-link pagination-first" title="First page">
+                                             <span>« First</span>
+                                        </a>
+                                        <a href="/receptionist/users?page=<%= currentPage - 1 %>&name=<%=filters.name %>&email=<%=filters.email %>&phone=<%=filters.phone %>"
+                                             class="pagination-link pagination-prev">
+                                             <span>‹ Previous</span>
+                                        </a>
+                                        <% } %>
+
+                                             <div class="pagination-numbers">
+                                                  <% for (let i=1; i <=totalPages; i++) { %>
+                                                       <% if (i===currentPage) { %>
+                                                            <span class="pagination-link pagination-current">
+                                                                 <%= i %>
+                                                            </span>
+                                                            <% } else if (i===1 || i===totalPages || (i>= currentPage -
+                                                                 1 && i <= currentPage + 1)) { %>
+                                                                      <a href="/receptionist/users?page=<%= i %>&name=<%=filters.name %>&email=<%=filters.email %>&phone=<%=filters.phone %>"
+                                                                           class="pagination-link">
+                                                                           <%= i %>
+                                                                      </a>
+                                                                      <% } else if (i===2 || i===totalPages - 1) { %>
+                                                                           <span
+                                                                                class="pagination-link pagination-dots">...</span>
+                                                                           <% } %>
+                                                                                <% } %>
+                                             </div>
+
+                                             <% if (currentPage < totalPages) { %>
+                                                  <a href="/receptionist/users?page=<%= currentPage + 1 %>&name=<%=filters.name %>&email=<%=filters.email %>&phone=<%=filters.phone %>"
+                                                       class="pagination-link pagination-next">
+                                                       <span>Next ›</span>
+                                                  </a>
+                                                  <a href="/receptionist/users?page=<%= totalPages %>&name=<%=filters.name %>&email=<%=filters.email %>&phone=<%=filters.phone %>"
+                                                       class="pagination-link pagination-last" title="Last page">
+                                                       <span>Last »</span>
+                                                  </a>
+                                                  <% } %>
+                              </nav>
+                              <div class="pagination-info">
+                                   Showing page <strong>
+                                        <%= currentPage %>
+                                   </strong> of <strong>
+                                        <%= totalPages %>
+                                   </strong>
+                                   (<strong>
+                                        <%= totalItems %>
+                                   </strong> total users)
+                              </div>
+                         </div>
+                         <% } %>
+
+                              <% } else { %>
+                                   <div class="no-products">
+                                        <p>No users found.</p>
+                                   </div>
+                                   <% } %>
+          </div>
+</body>

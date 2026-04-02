@@ -1,0 +1,71 @@
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Home</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/productStyle.css">
+     <link rel="stylesheet" href="/stylesheets/userStyle.css">
+</head>
+
+<body>
+     <nav class="top-navbar">
+          <div class="nav-inner">
+               <h1>Ecommerce Application</h1>
+               <div class="nav-actions">
+                    <% if (typeof user !=='undefined' && user) { %>
+                         <div class="nav-user-menu">
+                              <span class="user-name">
+                                   Welcome <%= user.email ? user.email.charAt(0).toUpperCase() + user.email.slice(1)
+                                        : '' %>!
+                              </span>
+
+                              <!-- USER NAVIGATION -->
+                              <% if (user.role==='user' ) { %>
+                                   <a href="/user/" class="nav-link" title="Dashboard">Dashboard</a>
+                                   <a href="/user/cart" class="nav-link" title="cart">My Cart</a>
+                                   <a href="/user/orders" class="nav-link" title="orders">My Orders</a>
+                                   <a href="/user/profile" class="nav-link" title="profile">My Profile</a>
+                                   <% } %>
+
+                                        <!-- ADMIN NAVIGATION -->
+                                        <% if (user.role==='admin' ) { %>
+                                             <a href="/admin/" class="nav-link" title="Dashboard">Dashboard</a>
+                                             <a href="/admin/products" class="nav-link" title="All Products">All
+                                                  Products</a>
+                                             <a href="/admin/users" class="nav-link" title="All Users">All Users</a>
+                                             <a href="/admin/addUser" class="nav-link" title="Add New User">Add User</a>
+                                             <% } %>
+
+                                                  <!-- ACCOUNTANT NAVIGATION -->
+                                                  <% if (user.role==='accountant' ) { %>
+                                                       <a href="/accountant/" class="nav-link"
+                                                            title="Dashboard">Dashboard</a>
+                                                       <a href="/accountant/orders" class="nav-link"
+                                                            title="View Orders">View Orders</a>
+                                                       <% } %>
+
+                                                            <!-- RECEPTIONIST NAVIGATION -->
+                                                            <% if (user.role==='receptionist' ) { %>
+                                                                 <a href="/receptionist/" class="nav-link"
+                                                                      title="Dashboard">Dashboard</a>
+                                                                 <a href="/receptionist/users" class="nav-link"
+                                                                      title="Manage Users">Users</a>
+                                                                 <a href="/receptionist/products" class="nav-link"
+                                                                      title="Manage Product">Products</a>
+                                                                 <a href="/receptionist/products/addProduct"
+                                                                      class="nav-link" title="Add New Product">Add New
+                                                                      Product</a>
+                                                                 <% } %>
+
+                                                                      <a href="/auth/logout" class="nav-link logout-btn"
+                                                                           title="Sign Out">Logout</a>
+                         </div>
+                         <% } else { %>
+                              <a href="/auth/login" class="nav-link">Login</a>
+                              <a href="/auth/register" class="nav-link signup-link">Register</a>
+                              <% } %>
+               </div>
+          </div>
+     </nav>
+</body>

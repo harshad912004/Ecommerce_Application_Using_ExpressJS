@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Admin Dashboard</title>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+     <link rel="stylesheet" href="/stylesheets/adminStyle.css">
+</head>
+
+<body>
+     <%- include('../header', { user: user }) %>
+
+          <div class="admin-dashboard">
+               <h1 class="dashboard-title">Admin Dashboard</h1>
+
+               <div class="dashboard-grid">
+                    <div class="dashboard-card users">
+                         <h3 class="card-title">Total<br>Users</h3>
+                         <p class="card-value">
+                              <%= totalUsers %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card users">
+                         <h3 class="card-title">Total<br>Active Users</h3>
+                         <p class="card-value">
+                              <%= totalActiveUsers %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card users">
+                         <h3 class="card-title">Total<br>Inactive Users</h3>
+                         <p class="card-value">
+                              <%= totalInactiveUsers %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card accountants">
+                         <h3 class="card-title">Total<br>Accountants</h3>
+                         <p class="card-value">
+                              <%= totalAccountants %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card receptionists">
+                         <h3 class="card-title">Total<br>Receptionists</h3>
+                         <p class="card-value">
+                              <%= totalReceptionists %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card products">
+                         <h3 class="card-title">Total<br>Products</h3>
+                         <p class="card-value">
+                              <%= totalProducts %>
+                         </p>
+                    </div>
+                    <div class="dashboard-card orders">
+                         <h3 class="card-title">Total<br>Orders</h3>
+                         <p class="card-value">
+                              <%= totalOrders %>
+                         </p>
+                    </div>
+               </div>
+          </div>
+
+</body>
+
+</html>
