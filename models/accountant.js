@@ -1,6 +1,5 @@
 const db = require('../config/db_connection');
 
-// Get all orders with details
 exports.getAllOrders = async () => {
      try {
           const getAllOrdersQuery = `

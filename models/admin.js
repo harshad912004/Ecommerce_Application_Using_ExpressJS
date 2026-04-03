@@ -1,61 +1,12 @@
 const db = require('../config/db_connection');
 
-exports.getAllUsers = async () => {
-     try {
-          const getAllUsersQuery = `
-               SELECT id, role_id, name, email, phone FROM users WHERE role_id = 2
-          `;
-          const [rows] = await db.query(getAllUsersQuery);
-          return rows;
-     } catch (err) {
-          console.error('Error fetching users: ' + err.message);
-          throw err;
-     }
-};
-
-exports.getPaginatedUsers = async (page = 1, limit = 5) => {
-     try {
-          const offset = (page - 1) * limit;
-          const getPaginatedUsersQuery = `
-               SELECT 
-                    u.id,
-                    u.name,
-                    u.email,
-                    u.phone 
-               FROM 
-                    users u 
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
-               WHERE r.id = 2 AND u.status = 1
-               LIMIT ? OFFSET ?
-          `;
-          const [rows] = await db.query(getPaginatedUsersQuery, [limit, offset]);
-          return rows;
-     } catch (err) {
-          console.error('Error fetching paginated users: ' + err.message);
-          throw err;
-     }
-};
-
 exports.getFilteredPaginatedUsers = async (page = 1, limit = 5, filters = {}) => {
      try {
           const offset = (page - 1) * limit;
           let query = `
-               SELECT 
-                    u.id,
-                    u.name,
-                    u.email,
-                    u.phone,
-                    u.status 
-               FROM 
-                    users u 
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
-               WHERE r.id = 2
+               SELECT id, role_id, name, email, phone, status 
+               FROM users 
+               WHERE role_id = 2
           `;
           const params = [];
 
@@ -86,15 +37,9 @@ exports.getFilteredPaginatedUsers = async (page = 1, limit = 5, filters = {}) =>
 exports.getFilteredUsersCount = async (filters = {}) => {
      try {
           let query = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    users u
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
-               WHERE r.id = 2
+               SELECT COUNT(*) AS count 
+               FROM users 
+               WHERE role_id = 2
           `;
           const params = [];
 
@@ -119,36 +64,12 @@ exports.getFilteredUsersCount = async (filters = {}) => {
      }
 };
 
-exports.getTotalUsersCount = async () => {
-     try {
-          const getTotalUsersCountQuery = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    users u
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
-               WHERE r.id = 2 AND u.status = 1
-          `;
-          const [rows] = await db.query(getTotalUsersCountQuery);
-          return rows[0].count;
-     } catch (err) {
-          console.error('Error fetching total users count: ' + err.message);
-          throw err;
-     }
-};
-
 exports.getTotalUsers = async () => {
      try {
           const getTotalUsersQuery = `
-               SELECT 
-                    COUNT(*) AS totalUsers 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 2
+               SELECT COUNT(*) AS totalUsers 
+               FROM users 
+               WHERE role_id = 2
           `;
           const [rows] = await db.query(getTotalUsersQuery);
           return rows[0].totalUsers;
@@ -161,12 +82,9 @@ exports.getTotalUsers = async () => {
 exports.getTotalActiveUsers = async () => {
      try {
           const getTotalActiveUsersQuery = `
-               SELECT 
-                    COUNT(*) AS totalActiveUsers 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 2 AND status = 1
+               SELECT COUNT(*) AS totalActiveUsers 
+               FROM users 
+               WHERE role_id = 2 AND status = 1
           `;
           const [rows] = await db.query(getTotalActiveUsersQuery);
           return rows[0].totalActiveUsers;
@@ -179,12 +97,9 @@ exports.getTotalActiveUsers = async () => {
 exports.getTotalInactiveUsers = async () => {
      try {
           const getTotalInactiveUsersQuery = `
-               SELECT 
-                    COUNT(*) AS totalInactiveUsers 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 2 AND status = 0
+               SELECT COUNT(*) AS totalInactiveUsers 
+               FROM users 
+               WHERE role_id = 2 AND status = 0
           `;
           const [rows] = await db.query(getTotalInactiveUsersQuery);
           return rows[0].totalInactiveUsers;
@@ -197,12 +112,9 @@ exports.getTotalInactiveUsers = async () => {
 exports.deleteUser = async (id) => {
      try {
           const deleteUserQuery = `
-               UPDATE
-                    users
-               SET
-                    status = 0
-               WHERE
-                    id = ? AND status = 1
+               UPDATE users
+               SET status = 0
+               WHERE id = ? AND status = 1
           `;
           await db.query(deleteUserQuery, [id]);
      } catch (err) {
@@ -214,12 +126,9 @@ exports.deleteUser = async (id) => {
 exports.getTotalAccountants = async () => {
      try {
           const getTotalAccountantQuery = `
-               SELECT 
-                    COUNT(*) AS totalAccountant 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 3 AND status = 1
+               SELECT COUNT(*) AS totalAccountant 
+               FROM users 
+               WHERE role_id = 3 AND status = 1
           `;
           const [rows] = await db.query(getTotalAccountantQuery);
           return rows[0].totalAccountant;
@@ -232,12 +141,9 @@ exports.getTotalAccountants = async () => {
 exports.getTotalReceptionists = async () => {
      try {
           const getTotalReceptionistQuery = `
-               SELECT 
-                    COUNT(*) AS totalReceptionist 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 4 AND status = 1
+               SELECT COUNT(*) AS totalReceptionist 
+               FROM users 
+               WHERE role_id = 4 AND status = 1
           `;
           const [rows] = await db.query(getTotalReceptionistQuery);
           return rows[0].totalReceptionist;
@@ -250,12 +156,9 @@ exports.getTotalReceptionists = async () => {
 exports.getTotalProducts = async () => {
      try {
           const getTotalProductsQuery = `
-               SELECT 
-                    COUNT(*) AS totalProducts 
-               FROM 
-                    products 
-               WHERE 
-                    status = 1
+               SELECT COUNT(*) AS totalProducts 
+               FROM products 
+               WHERE status = 1
           `;
           const [rows] = await db.query(getTotalProductsQuery);
           return rows[0].totalProducts;
@@ -269,16 +172,9 @@ exports.getPaginatedProducts = async (page = 1, limit = 5) => {
      try {
           const offset = (page - 1) * limit;
           const getPaginatedProductsQuery = `
-               SELECT 
-                    id,
-                    name,
-                    brand,
-                    price,
-                    description
-               FROM 
-                    products 
-               WHERE 
-                    status = 1
+               SELECT id, name, brand, price, description, status
+               FROM products 
+               WHERE status = 1
                LIMIT ? OFFSET ?
           `;
           const [rows] = await db.query(getPaginatedProductsQuery, [limit, offset]);
@@ -293,16 +189,9 @@ exports.getFilteredPaginatedProducts = async (page = 1, limit = 5, filters = {})
      try {
           const offset = (page - 1) * limit;
           let query = `
-               SELECT 
-                    id,
-                    name,
-                    brand,
-                    price,
-                    description
-               FROM 
-                    products 
-               WHERE 
-                    status = 1
+               SELECT id, name, brand, price, description, status 
+               FROM products 
+               WHERE status = 1
           `;
           const params = [];
 
@@ -333,12 +222,9 @@ exports.getFilteredPaginatedProducts = async (page = 1, limit = 5, filters = {})
 exports.getFilteredProductsCount = async (filters = {}) => {
      try {
           let query = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    products 
-               WHERE 
-                    status = 1
+               SELECT COUNT(*) AS count 
+               FROM products 
+               WHERE status = 1
           `;
           const params = [];
 
@@ -366,12 +252,9 @@ exports.getFilteredProductsCount = async (filters = {}) => {
 exports.getTotalProductsCount = async () => {
      try {
           const getTotalProductsCountQuery = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    products 
-               WHERE 
-                    status = 1
+               SELECT COUNT(*) AS count 
+               FROM products 
+               WHERE status = 1
           `;
           const [rows] = await db.query(getTotalProductsCountQuery);
           return rows[0].count;
@@ -384,12 +267,9 @@ exports.getTotalProductsCount = async () => {
 exports.getTotalOrders = async () => {
      try {
           const getTotalOrdersQuery = `
-               SELECT 
-                    COUNT(*) AS totalOrders 
-               FROM 
-                    order_items 
-               WHERE 
-                    status = 1
+               SELECT COUNT(*) AS totalOrders 
+               FROM order_items 
+               WHERE status = 1
           `;
           const [rows] = await db.query(getTotalOrdersQuery);
           return rows[0].totalOrders;

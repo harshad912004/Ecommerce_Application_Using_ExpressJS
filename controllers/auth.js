@@ -1,6 +1,3 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__filename, '../.env') });
-
 const jwt = require("jsonwebtoken");
 const auth = require('../models/auth');
 const bcryptjs = require('bcryptjs');
@@ -76,7 +73,6 @@ exports.signin = async (req, res) => {
      try {
           const { email, password } = req.body;
 
-          console.log(email, password);
           const user = await auth.getUserByEmail(email);
           if (!user) {
                logger.error('User not found');

@@ -1,8 +1,4 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__filename, '../.env') });
-
 const bcryptjs = require('bcryptjs');
-
 const User = require('../models/user');
 const Product = require('../models/product');
 const logger = require("../middlewares/loggerMiddleware");

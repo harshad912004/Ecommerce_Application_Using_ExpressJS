@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 db = require('../config/db_connection');
 
 const Admin = require('../models/admin');

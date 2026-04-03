@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const Receptionist = require('../models/receptionist');
 const Product = require('../models/product');
 const logger = require("../middlewares/loggerMiddleware");

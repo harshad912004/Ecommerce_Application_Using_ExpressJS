@@ -39,14 +39,8 @@ exports.getPaginatedProducts = async (page = 1, limit = 5) => {
      try {
           const offset = (page - 1) * limit;
           const getPaginatedProductQuery = `
-               SELECT 
-                    id,
-                    name,
-                    price,
-                    brand,
-                    description 
-               FROM 
-                    products
+               SELECT id, name, price, brand, description 
+               FROM products
                WHERE status = 1
                LIMIT ? OFFSET ?
           `;
@@ -79,14 +73,8 @@ exports.getFilteredProducts = async (page = 1, limit = 5, filters = {}) => {
      try {
           const offset = (page - 1) * limit;
           let query = `
-               SELECT 
-                    id,
-                    name,
-                    price,
-                    brand,
-                    description 
-               FROM 
-                    products
+               SELECT id, name, price, brand, description 
+               FROM products
                WHERE status = 1
           `;
           const params = [];
@@ -125,10 +113,8 @@ exports.getFilteredProducts = async (page = 1, limit = 5, filters = {}) => {
 exports.getFilteredProductsCount = async (filters = {}) => {
      try {
           let query = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    products
+               SELECT COUNT(*) AS count 
+               FROM products
                WHERE status = 1
           `;
           const params = [];

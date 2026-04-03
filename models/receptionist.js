@@ -1,39 +1,11 @@
 const db = require('../config/db_connection');
 
-exports.getAllUsers = async () => {
-     try {
-          const getAllUsersQuery = `
-               SELECT 
-                    id, 
-                    name, 
-                    email, 
-                    phone 
-               FROM 
-                    users 
-               WHERE 
-                    role_id = 2 
-               AND 
-                    status = 1
-               `;
-          const [rows] = await db.execute(getAllUsersQuery);
-          return rows;
-     } catch (err) {
-          console.error("Error fetching users:", err);
-          throw err;
-     }
-};
-
 exports.getTotalActiveUsers = async () => {
      try {
           const getTotalActiveUsersQuery = `
-               SELECT
-                    COUNT(*) AS totalActiveUsers
-               FROM
-                    users
-               WHERE
-                    role_id = 2
-               AND
-                    status = 1
+               SELECT COUNT(*) AS totalActiveUsers
+               FROM users
+               WHERE role_id = 2 AND status = 1
           `;
           const [rows] = await db.execute(getTotalActiveUsersQuery);
           return rows[0].totalActiveUsers;
@@ -46,14 +18,9 @@ exports.getTotalActiveUsers = async () => {
 exports.getTotalInactiveUsers = async () => {
      try {
           const getTotalInactiveUsersQuery = `
-               SELECT
-                    COUNT(*) AS totalInactiveUsers
-               FROM
-                    users
-               WHERE
-                    role_id = 2
-               AND
-                    status = 0
+               SELECT COUNT(*) AS totalInactiveUsers
+               FROM users
+               WHERE role_id = 2 AND status = 0
           `;
           const [rows] = await db.execute(getTotalInactiveUsersQuery);
           return rows[0].totalInactiveUsers;
@@ -67,17 +34,9 @@ exports.getFilteredPaginatedUsers = async (page = 1, limit = 5, filters = {}) =>
      try {
           const offset = (page - 1) * limit;
           let query = `
-               SELECT 
-                    u.id,
-                    u.name,
-                    u.email,
-                    u.phone 
-               FROM 
-                    users u 
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
+               SELECT u.id, u.name, u.email, u.phone 
+               FROM users u 
+               JOIN roles r ON u.role_id = r.id
                WHERE r.id = 2 AND u.status = 1
           `;
           const params = [];
@@ -109,14 +68,9 @@ exports.getFilteredPaginatedUsers = async (page = 1, limit = 5, filters = {}) =>
 exports.getFilteredUsersCount = async (filters = {}) => {
      try {
           let query = `
-               SELECT 
-                    COUNT(*) AS count 
-               FROM 
-                    users u
-               JOIN 
-                    roles r 
-               ON 
-                    u.role_id = r.id
+               SELECT COUNT(*) AS count 
+               FROM users u
+               JOIN roles r ON u.role_id = r.id
                WHERE r.id = 2 AND u.status = 1
           `;
           const params = [];
@@ -169,15 +123,9 @@ exports.createProduct = async (name, price, brand, description) => {
 exports.updateProduct = async (id, name, price, brand, description) => {
      try {
           const updateProductQuery = `
-               UPDATE 
-                    products 
-               SET 
-                    name = ?,
-                    price = ?,
-                    brand = ?,
-                    description = ?
-               WHERE 
-                    id = ? AND status = 1
+               UPDATE products 
+               SET name = ?, price = ?, brand = ?, description = ?
+               WHERE id = ? AND status = 1
           `;
           await db.query(updateProductQuery, [name, price, brand, description, id]);
      } catch (err) {
@@ -189,12 +137,9 @@ exports.updateProduct = async (id, name, price, brand, description) => {
 exports.deleteProduct = async (id) => {
      try {
           const deleteProductQuery = `
-               UPDATE
-                    products
-               SET
-                    status = 0
-               WHERE
-                    id = ? AND status = 1
+               UPDATE products
+               SET status = 0
+               WHERE id = ? AND status = 1
           `;
           await db.query(deleteProductQuery, [id]);
      } catch (err) {

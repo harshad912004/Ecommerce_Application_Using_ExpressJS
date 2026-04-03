@@ -3,12 +3,9 @@ const db = require('../config/db_connection');
 exports.getAllRoles = async () => {
      try {
           const getAllRolesQuery = `
-               SELECT 
-                    id, roles 
-               FROM
-                    roles 
-               where 
-                    status = 1
+               SELECT id, roles 
+               FROM roles 
+               where status = 1
           `;
           const [rows] = await db.query(getAllRolesQuery);
           return rows;
@@ -21,12 +18,9 @@ exports.getAllRoles = async () => {
 exports.getUserByEmail = async (email) => {
      try {
           const getUserEmailQuery = `
-               SELECT 
-                    id, name, email, phone, password 
-               FROM
-                    users
-               WHERE 
-                    email = ? and status = 1
+               SELECT id, name, email, phone, password 
+               FROM users
+               WHERE email = ? and status = 1
           `;
           const [rows] = await db.query(getUserEmailQuery, [email]);
           return rows;
@@ -60,18 +54,10 @@ exports.getCartItems = async (user_id) => {
                     p.price,
                     ci.quantity,
                     (p.price * ci.quantity) as total_price
-               from
-                    cart_items ci 
-               join 
-                    products p 
-               on 
-                    ci.product_id = p.id 
-               join 
-                    carts c 
-               on 
-                    ci.cart_id = c.id 
-               where 
-                    c.user_id = ?
+               from cart_items ci 
+               join products p on ci.product_id = p.id 
+               join carts c on ci.cart_id = c.id 
+               where c.user_id = ?
           `;
           const [rows] = await db.query(getCartItemsQuery, [user_id]);
           return rows;
@@ -84,12 +70,9 @@ exports.getCartItems = async (user_id) => {
 exports.addToCart = async (user_id, product_id, quantity = 1) => {
      try {
           const [carts] = await db.query(`
-               SELECT 
-                    id 
-               FROM 
-                    carts 
-               WHERE 
-                    user_id = ? and status = 1
+               SELECT id 
+               FROM carts 
+               WHERE user_id = ? and status = 1
           `, [user_id]);
 
           let cart_id;
@@ -208,20 +191,11 @@ exports.getUserOrders = async (user_id) => {
                     (p.price * oi.quantity) as total_price,
                     oi.order_status,
                     oi.order_date
-               FROM
-                    orders o
-               JOIN
-                    order_items oi 
-               ON 
-                    oi.order_id = o.id
-               JOIN
-                    products p 
-               ON 
-                    oi.product_id = p.id
-               WHERE
-                    o.user_id = ?
-               ORDER BY
-                    oi.order_date DESC
+               FROM orders o
+               JOIN order_items oi ON oi.order_id = o.id
+               JOIN products p ON oi.product_id = p.id
+               WHERE o.user_id = ?
+               ORDER BY oi.order_date DESC
           `;
           const [rows] = await db.query(getUserOrdersQuery, [user_id]);
           return rows;
@@ -234,12 +208,9 @@ exports.getUserOrders = async (user_id) => {
 exports.getUserProfile = async (user_id) => {
      try {
           const getUserProfileQuery = `
-               SELECT 
-                    name, email, phone 
-               FROM 
-                    users 
-               WHERE 
-                    id = ? and status = 1
+               SELECT name, email, phone 
+               FROM users 
+               WHERE id = ? and status = 1
           `;
           const [rows] = await db.query(getUserProfileQuery, [user_id]);
           return rows;
@@ -252,12 +223,9 @@ exports.getUserProfile = async (user_id) => {
 exports.updateUserProfile = async (user_id, name, phone, password) => {
      try {
           const updateUserProfileQuery = `
-               UPDATE 
-                    users 
-               SET 
-                    name = ?, phone = ?, password = ? 
-               WHERE 
-                    id = ? and status = 1
+               UPDATE users 
+               SET name = ?, phone = ?, password = ? 
+               WHERE id = ? and status = 1
           `;
           const [result] = await db.query(updateUserProfileQuery, [name, phone, password, user_id]);
           return result;
