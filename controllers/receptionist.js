@@ -98,6 +98,36 @@ exports.viewAllProducts = async (req, res) => {
      }
 };
 
+exports.viewTopSellingProducts = async (req, res) => {
+     try {
+          const topSellingProducts = await Product.getTopSellingProducts();
+          res.render('receptionist/topSellingProducts', {
+               user: req.user,
+               products: topSellingProducts
+          });
+     } catch (err) {
+          logger.error('Top selling products display failed.' + err.message);
+          return res.status(500).render('error', {
+               message: 'Top selling products page not found',
+          });
+     }
+};
+
+exports.viewTotalQuantitySold = async (req, res) => {
+     try {
+          const totalQuantitySold = await Product.getTotalQuantitySold();
+          res.render('receptionist/totalQuantitySold', {
+               user: req.user,
+               products: totalQuantitySold
+          });
+     } catch (err) {
+          logger.error('Total quantity sold display failed.' + err.message);
+          return res.status(500).render('error', {
+               message: 'Total quantity sold page not found',
+          });
+     }
+};
+
 exports.addProductForm = async (req, res) => {
      try {
           res.render('receptionist/addProduct', {

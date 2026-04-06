@@ -2,18 +2,9 @@ const db = require('../config/db_connection');
 
 exports.getProductById = async (id) => {
      try {
-          const getProductByIdQuery = db.query(`
-               CREATE PROCEDURE IF NOT EXISTS GetAllActiveProducts()
-               BEGIN
-                    SELECT id, name, price, brand, description FROM products WHERE status = 1;
-               END
-          `, (err) => {
-               if (err) {
-                    console.error("Error creating GetAllActiveProducts procedure:", err);
-               } else {
-                    console.log("GetAllActiveProducts procedure created or already exists.");
-               }
-          });
+          const getProductByIdQuery = `
+               SELECT id, name, price, brand, description, stock FROM products WHERE id = ? AND status = 1;
+          `;
           const [rows] = await db.query(getProductByIdQuery, [id]);
           return rows[0];
      } catch (err) {
@@ -25,7 +16,7 @@ exports.getProductById = async (id) => {
 exports.getAllProducts = async () => {
      try {
           const getAllProductQuery = `
-               SELECT id, name, price, brand, description FROM products WHERE status = 1;
+               SELECT id, name, price, brand, description, stock FROM products WHERE status = 1;
           `;
           const [rows] = await db.query(getAllProductQuery);
           return rows;
@@ -39,7 +30,7 @@ exports.getPaginatedProducts = async (page = 1, limit = 5) => {
      try {
           const offset = (page - 1) * limit;
           const getPaginatedProductQuery = `
-               SELECT id, name, price, brand, description 
+               SELECT id, name, price, brand, description, stock 
                FROM products
                WHERE status = 1
                LIMIT ? OFFSET ?
@@ -73,7 +64,7 @@ exports.getFilteredProducts = async (page = 1, limit = 5, filters = {}) => {
      try {
           const offset = (page - 1) * limit;
           let query = `
-               SELECT id, name, price, brand, description 
+               SELECT id, name, price, brand, description, stock 
                FROM products
                WHERE status = 1
           `;
@@ -143,6 +134,41 @@ exports.getFilteredProductsCount = async (filters = {}) => {
           return rows[0].count;
      } catch (err) {
           console.error("Error fetching filtered products count:", err);
+          throw err;
+     }
+};
+
+exports.getTopSellingProducts = async () => {
+     try {
+          const query = `
+               SELECT p.id, p.name, p.brand, SUM(oi.quantity) as total_quantity
+               FROM products p
+               JOIN order_items oi ON p.id = oi.product_id
+               GROUP BY p.id, p.name, p.brand
+               ORDER BY total_quantity DESC
+               LIMIT 5
+          `;
+          const [rows] = await db.query(query);
+          return rows;
+     } catch (err) {
+          console.error("Error fetching top selling products:", err);
+          throw err;
+     }
+};
+
+exports.getTotalQuantitySold = async () => {
+     try {
+          const query = `
+               SELECT p.id, p.name, p.brand, SUM(oi.quantity) as total_quantity_sold
+               FROM products p
+               JOIN order_items oi ON p.id = oi.product_id
+               GROUP BY p.id, p.name, p.brand
+               ORDER BY total_quantity_sold DESC
+          `;
+          const [rows] = await db.query(query);
+          return rows;
+     } catch (err) {
+          console.error("Error fetching total quantity sold:", err);
           throw err;
      }
 };

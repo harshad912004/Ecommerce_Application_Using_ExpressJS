@@ -143,35 +143,55 @@ exports.placeOrder = async (user_id) => {
                return { affectedRows: 0 };
           }
           const cart_id = carts[0].id;
-          const [cartItems] = await db.query('SELECT product_id, quantity FROM cart_items WHERE cart_id = ?', [cart_id]);
+          const [cartItems] = await db.query('SELECT ci.product_id, ci.quantity, p.price, p.stock FROM cart_items ci JOIN products p ON ci.product_id = p.id WHERE ci.cart_id = ?', [cart_id]);
           if (cartItems.length === 0) {
                return { affectedRows: 0 };
           }
+
+          // Check stock for all items
+          for (const item of cartItems) {
+               if (item.quantity > item.stock) {
+                    throw new Error(`Insufficient stock for product ${item.product_id}`);
+               }
+          }
+
           const connection = await db.getConnection();
           try {
-               await connection.beginTransaction();
-               const [existingOrders] = await connection.query('SELECT id FROM orders WHERE user_id = ? LIMIT 1', [user_id]);
-               let order_id;
-               if (existingOrders.length > 0) {
-                    order_id = existingOrders[0].id;
-               } else {
-                    const [orderResult] = await connection.query('INSERT INTO orders (user_id) VALUES (?)', [user_id]);
-                    order_id = orderResult.insertId;
-               }
+               await connection.query('START TRANSACTION');
+
+               // Calculate total amount
+               const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+               const [orderResult] = await connection.query('INSERT INTO products_orders (user_id, total_amount, order_date) VALUES (?, ?, CURDATE())', [user_id, totalAmount]);
+               const order_id = orderResult.insertId;
+
                for (const item of cartItems) {
+                    const [stockRows] = await connection.query('SELECT stock FROM products WHERE id = ? FOR UPDATE', [item.product_id]);
+                    if (stockRows.length === 0 || stockRows[0].stock < item.quantity) {
+                         throw new Error(`Insufficient stock for product ${item.product_id}`);
+                    }
+
                     await connection.query(`
-                         INSERT INTO order_items (order_id, product_id, quantity, total_amount, order_date, order_status) 
-                         VALUES (?, ?, ?, ?, NOW(), 'pending')
-                    `, [order_id, item.product_id, item.quantity, item.quantity * (await connection.query('SELECT price FROM products WHERE id = ?', [item.product_id]))[0][0].price]
-                    );
+                         INSERT INTO order_items (order_id, product_id, quantity) 
+                         VALUES (?, ?, ?)
+                    `, [order_id, item.product_id, item.quantity]);
+
+                    // Update product stock after order item insertion
+                    const [updateResult] = await connection.query('UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?', [item.quantity, item.product_id, item.quantity]);
+                    if (updateResult.affectedRows === 0) {
+                         throw new Error(`Insufficient stock for product ${item.product_id} during order processing`);
+                    }
                }
+
                await connection.query('DELETE FROM cart_items WHERE cart_id = ?', [cart_id]);
-               await connection.commit();
+               await connection.query('COMMIT');
                return { affectedRows: 1 };
           } catch (err) {
-               await connection.rollback();
+               await connection.query('ROLLBACK');
                console.error("Error during order placement transaction:", err);
                throw err;
+          } finally {
+               connection.release();
           }
      } catch (err) {
           console.error("Error placing order:", err);
@@ -183,19 +203,20 @@ exports.getUserOrders = async (user_id) => {
      try {
           const getUserOrdersQuery = `
                SELECT
+                    o.id as order_id,
                     o.user_id,
                     oi.product_id,
                     p.name,
                     p.brand,
                     oi.quantity,
-                    (p.price * oi.quantity) as total_price,
-                    oi.order_status,
-                    oi.order_date
-               FROM orders o
+                    o.total_amount as total_price,
+                    o.order_status,
+                    o.order_date
+               FROM products_orders o
                JOIN order_items oi ON oi.order_id = o.id
                JOIN products p ON oi.product_id = p.id
                WHERE o.user_id = ?
-               ORDER BY oi.order_date DESC
+               ORDER BY o.order_date DESC
           `;
           const [rows] = await db.query(getUserOrdersQuery, [user_id]);
           return rows;

@@ -9,6 +9,9 @@ router.get('/users/delete/:id', Receptionist.deleteUser);
 
 router.get('/products', Receptionist.viewAllProducts);
 
+router.get('/products/topSelling', Receptionist.viewTopSellingProducts);
+router.get('/products/totalQuantitySold', Receptionist.viewTotalQuantitySold);
+
 router.get('/products/addProduct', Receptionist.addProductForm);
 router.post('/products/addProduct', Receptionist.addProduct);
 

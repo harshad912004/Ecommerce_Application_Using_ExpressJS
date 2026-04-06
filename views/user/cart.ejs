@@ -67,7 +67,6 @@
                                         parseFloat(p.total_price), 0).toFixed(2) %>
                               </span>
                               <form action="/user/placeOrder" method="POST">
-                                   <input type="hidden" name="product_id" value="<%= product.product_id %>">
                                    <button type="submit" class="btn-place-order">Place Order</button>
 
                                    <div class="cart-actions">

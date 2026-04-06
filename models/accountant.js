@@ -9,21 +9,20 @@ exports.getAllOrders = async () => {
                     u.email,
                     u.phone,
                     oi.order_id,
-                    oi.order_date,
-                    oi.order_status,
-                    oi.total_amount,
+                    o.order_date,
+                    o.order_status,
                     COUNT(oi.id) as items_count,
                     SUM(oi.quantity) as total_quantity
                FROM 
                     order_items oi
                JOIN 
-                    orders o ON oi.order_id = o.id
+                    products_orders o ON oi.order_id = o.id
                JOIN 
                     users u ON o.user_id = u.id
                GROUP BY 
-                    oi.order_id, oi.order_date, oi.order_status, oi.total_amount, u.id, u.name, u.email, u.phone
+                    oi.order_id, o.order_date, o.order_status, u.id, u.name, u.email, u.phone
                ORDER BY 
-                    oi.order_date DESC
+                    o.order_date DESC
           `;
           const [rows] = await db.query(getAllOrdersQuery);
           return rows;
